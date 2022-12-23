@@ -6,8 +6,13 @@ class CharacterAPI extends DataSource {
     this.store = store;
   }
 
-  async readCharacter() {
-    const response = await this.store.Character.findAll();
+  async info() {
+    const response = await this.store.Info.findAll();
+    return response[0];
+  }
+
+  async abilityScores() {
+    const response = await this.store.AbilityScores.findAll();
     return response[0];
   }
 }

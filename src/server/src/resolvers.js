@@ -1,7 +1,9 @@
 const resolvers = {
   Query: {
-    readCharacter: async (_, {}, { dataSources }) =>
-      await dataSources.characterAPI.readCharacter(),
+    info: async (_, {}, { dataSources }) =>
+      await dataSources.characterAPI.info(),
+    abilityScores: async (_, {}, { dataSources }) =>
+      await dataSources.characterAPI.abilityScores(),
   },
 };
 

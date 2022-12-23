@@ -6,7 +6,7 @@ module.exports.createStore = () => {
     storage: "../dnd.db",
   });
 
-  const Character = db.define("character", {
+  const Info = db.define("info", {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -27,7 +27,30 @@ module.exports.createStore = () => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    experience: {
+  });
+
+  const AbilityScores = db.define("ability_score", {
+    strength: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    dexterity: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    constitution: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    intelligence: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    wisdom: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    charisma: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
@@ -36,5 +59,5 @@ module.exports.createStore = () => {
   db.sync({ alter: true });
   console.log("All models were synchronized successfully.");
 
-  return { Character };
+  return { Info, AbilityScores };
 };

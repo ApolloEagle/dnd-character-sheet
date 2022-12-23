@@ -2,16 +2,25 @@ const { gql } = require("apollo-server");
 
 const typeDefs = gql`
   type Query {
-    readCharacter: Character!
+    info: Info!
+    abilityScores: AbilityScores
   }
 
-  type Character {
+  type Info {
     name: String!
     race: String!
     class: String!
     level: Int!
     background: String!
-    experience: Int!
+  }
+
+  type AbilityScores {
+    strength: Int!
+    dexterity: Int!
+    constitution: Int!
+    intelligence: Int!
+    wisdom: Int!
+    charisma: Int!
   }
 `;
 
