@@ -1,12 +1,15 @@
 import React from "react";
 import "./input.css";
-import { Info, AbilityScores } from "./components";
+import { Info, AbilityScores, Speed } from "./components";
 
 function App() {
   return (
     <div className="flex flex-col justify-start items-center h-screen w-screen">
       <Info />
-      <AbilityScores />
+      <div className="flex flex-row justify-around items-center w-full">
+        <AbilityScores />
+        <Speed />
+      </div>
     </div>
   );
 }

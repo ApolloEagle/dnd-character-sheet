@@ -13,50 +13,54 @@ module.exports.createStore = () => {
     },
     race: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     class: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     level: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
     background: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
+    },
+    speed: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   });
 
   const AbilityScores = db.define("ability_score", {
     strength: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
     dexterity: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
     constitution: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
     intelligence: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
     wisdom: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
     charisma: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
     },
   });
 
-  db.sync({ alter: true });
+  db.sync({ alter: false });
   console.log("All models were synchronized successfully.");
 
   return { Info, AbilityScores };

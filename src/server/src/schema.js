@@ -12,6 +12,7 @@ const typeDefs = gql`
     class: String!
     level: Int!
     background: String!
+    speed: Int!
   }
 
   type AbilityScores {

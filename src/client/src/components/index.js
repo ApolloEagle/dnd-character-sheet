@@ -1,4 +1,5 @@
-import { Info } from "./info";
-import { AbilityScores } from "./ability-scores";
+import Info from "./info";
+import AbilityScores from "./ability-scores";
+import Speed from "./speed";
 
-export { Info, AbilityScores };
+export { Info, AbilityScores, Speed };

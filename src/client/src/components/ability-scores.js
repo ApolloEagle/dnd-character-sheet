@@ -42,4 +42,4 @@ const AbilityScores = () => {
   );
 };
 
-export { AbilityScores };
+export default AbilityScores;
