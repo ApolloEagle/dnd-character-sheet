@@ -6,6 +6,15 @@ class CharacterAPI extends DataSource {
     this.store = store;
   }
 
+  async createUser(args) {
+    const response = await this.store.User.create({
+      name: args.name,
+      email: args.email,
+      password: args.password,
+    });
+    return response;
+  }
+
   async info() {
     const response = await this.store.Info.findAll();
     return response[0];

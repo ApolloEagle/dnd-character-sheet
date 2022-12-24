@@ -6,6 +6,17 @@ const typeDefs = gql`
     abilityScores: AbilityScores
   }
 
+  type Mutation {
+    createUser(name: String!, email: String!, password: String!): User!
+  }
+
+  type User {
+    id: Int!
+    name: String!
+    email: String!
+    password: String!
+  }
+
   type Info {
     name: String!
     race: String!

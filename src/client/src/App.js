@@ -1,17 +1,24 @@
-import React from "react";
+import React, { useState, createContext } from "react";
 import "./input.css";
-import { Info, AbilityScores, Speed } from "./components";
+import { Signup } from "./components";
+
+const UserContext = createContext(undefined);
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
   return (
-    <div className="flex flex-col justify-start items-center h-screen w-screen">
-      <Info />
-      <div className="flex flex-row justify-around items-center w-full">
-        <AbilityScores />
-        <Speed />
+    <UserContext.Provider value={{ loggedIn, setLoggedIn }}>
+      <div className="flex flex-col justify-center items-center h-screen w-screen bg-gray-100">
+        {loggedIn ? (
+          <button className="text-lg font-semibold bg-sky-500 active:bg-sky-300 text-white rounded-lg p-2 w-56">
+            Create Account
+          </button>
+        ) : (
+          <Signup />
+        )}
       </div>
-    </div>
+    </UserContext.Provider>
   );
 }
 
-export default App;
+export { App, UserContext };
