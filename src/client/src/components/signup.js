@@ -22,8 +22,9 @@ const Signup = () => {
   const [validName, setValidName] = useState(true);
   const [validEmail, setValidEmail] = useState(true);
   const [validPassword, setValidPassword] = useState(true);
+  const [registered, setRegistered] = useState(false);
   const { setLoggedIn } = useContext(UserContext);
-  const [createUser, { loading, error }] = useMutation(CREATE_USER);
+  const [createUser] = useMutation(CREATE_USER);
 
   const handleName = (name) => {
     !!name ? setValidName(true) : setValidName(false);
@@ -41,25 +42,38 @@ const Signup = () => {
   };
 
   const handleSubmit = () => {
-    !!name ? setValidName(true) : setValidName(false);
-    validateEmail(email) ? setValidEmail(true) : setValidEmail(false);
-    !!password ? setValidPassword(true) : setValidPassword(false);
-
-    if (name && validEmail && password) {
-      createUser({
-        variables: { name: name, email: email, password: password },
-      });
-
-      if (loading) return "Submitting...";
-      if (error) return `Submission error! ${error.message}`;
-
-      setLoggedIn(true);
-    }
+    createUser({
+      variables: { name: name, email: email, password: password },
+      onError: (err) => {
+        if (err.message.includes("name")) {
+          setValidName(false);
+        }
+        if (err.message.includes("email")) {
+          setValidEmail(false);
+        }
+        if (err.message.includes("password")) {
+          setValidPassword(false);
+        }
+        if (err.message === "Validation error") {
+          setRegistered(true);
+        }
+      },
+      onCompleted: () => {
+        setLoggedIn(true);
+      },
+    });
   };
 
   return (
     <div className="flex flex-col justify-center items-center bg-white w-96 rounded-lg p-8 drop-shadow-xl">
       <p className="text-xl font-bold pb-8">Sign Up</p>
+      <p
+        className={`text-red-600 text-sm mb-4 ${
+          registered ? "block" : "hidden"
+        }`}
+      >
+        Email is already registered. Please sign in.
+      </p>
       <input
         className={`rounded-lg h-12 w-full p-4 border outline-none mb-4 ${
           validName ? "border" : "border-red-600"

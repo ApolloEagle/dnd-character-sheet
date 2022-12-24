@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize, DataTypes, where } = require("sequelize");
 const bcrypt = require("bcrypt");
 
 module.exports.createStore = () => {
@@ -13,9 +13,26 @@ module.exports.createStore = () => {
       primaryKey: true,
       autoIncrement: true,
     },
-    name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    email: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: true,
+        is: /\S+@\S+\.\S+/,
+      },
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: true,
+      },
+    },
   });
 
   User.beforeCreate((user) => {
@@ -83,6 +100,7 @@ module.exports.createStore = () => {
   //   },
   // });
 
+  User.sync({ alter: true });
   db.sync({ alter: false });
   console.log("All models were synchronized successfully.");
 
