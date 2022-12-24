@@ -11,7 +11,7 @@ function App() {
       <div className="flex flex-col justify-center items-center h-screen w-screen bg-gray-100">
         {loggedIn ? (
           <button className="text-lg font-semibold bg-sky-500 active:bg-sky-300 text-white rounded-lg p-2 w-56">
-            Create Account
+            Create Character
           </button>
         ) : (
           <Signup />

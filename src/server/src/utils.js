@@ -1,4 +1,5 @@
 const { Sequelize, DataTypes } = require("sequelize");
+const bcrypt = require("bcrypt");
 
 module.exports.createStore = () => {
   const db = new Sequelize({
@@ -12,8 +13,20 @@ module.exports.createStore = () => {
       primaryKey: true,
       autoIncrement: true,
     },
+    name: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
+  });
+
+  User.beforeCreate((user) => {
+    return bcrypt
+      .hash(user.password, 10)
+      .then((hash) => {
+        user.password = hash;
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
   });
 
   // const Info = db.define("info", {
