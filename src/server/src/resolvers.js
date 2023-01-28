@@ -1,13 +1,8 @@
 const resolvers = {
-  Query: {
-    info: async (_, {}, { dataSources }) =>
-      await dataSources.characterAPI.info(),
-    abilityScores: async (_, {}, { dataSources }) =>
-      await dataSources.characterAPI.abilityScores(),
-  },
   Mutation: {
-    createUser: (_, args, { dataSources }) =>
-      dataSources.characterAPI.createUser(args),
+    register: (_, args, { dataSources }) =>
+      dataSources.characterAPI.register(args),
+    login: (_, args, { dataSources }) => dataSources.characterAPI.login(args),
   },
 };
 

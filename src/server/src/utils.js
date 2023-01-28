@@ -16,21 +16,32 @@ module.exports.createStore = () => {
     name: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: true,
+        notEmpty: {
+          msg: "Please enter your name.",
+        },
       },
     },
     email: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: true,
-        is: /\S+@\S+\.\S+/,
+        isEmail: {
+          msg: "Please enter a valid email.",
+        },
+        isUnique() {
+          return User.findOne({ where: { email: this.email } }).then((user) => {
+            if (user) {
+              throw new Error("Email is already registered.");
+            }
+          });
+        },
       },
-      unique: true,
     },
     password: {
       type: DataTypes.STRING,
       validate: {
-        notEmpty: true,
+        notEmpty: {
+          msg: "Please enter your password.",
+        },
       },
     },
   });
@@ -45,60 +56,6 @@ module.exports.createStore = () => {
         throw new Error(error);
       });
   });
-
-  // const Info = db.define("info", {
-  //   name: {
-  //     type: DataTypes.STRING,
-  //     allowNull: false,
-  //   },
-  //   race: {
-  //     type: DataTypes.STRING,
-  //     allowNull: false,
-  //   },
-  //   class: {
-  //     type: DataTypes.STRING,
-  //     allowNull: false,
-  //   },
-  //   level: {
-  //     type: DataTypes.INTEGER,
-  //     allowNull: false,
-  //   },
-  //   background: {
-  //     type: DataTypes.STRING,
-  //     allowNull: false,
-  //   },
-  //   speed: {
-  //     type: DataTypes.STRING,
-  //     allowNull: false,
-  //   },
-  // });
-
-  // const AbilityScores = db.define("ability_score", {
-  //   strength: {
-  //     type: DataTypes.INTEGER,
-  //     allowNull: false,
-  //   },
-  //   dexterity: {
-  //     type: DataTypes.INTEGER,
-  //     allowNull: false,
-  //   },
-  //   constitution: {
-  //     type: DataTypes.INTEGER,
-  //     allowNull: false,
-  //   },
-  //   intelligence: {
-  //     type: DataTypes.INTEGER,
-  //     allowNull: false,
-  //   },
-  //   wisdom: {
-  //     type: DataTypes.INTEGER,
-  //     allowNull: false,
-  //   },
-  //   charisma: {
-  //     type: DataTypes.INTEGER,
-  //     allowNull: false,
-  //   },
-  // });
 
   User.sync({ alter: true });
   db.sync({ alter: false });

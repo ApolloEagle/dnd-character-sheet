@@ -2,61 +2,71 @@ import React, { useContext, useState } from "react";
 import { UserContext } from "../app";
 import { useMutation, gql } from "@apollo/client";
 
-const CREATE_USER = gql`
-  mutation CreateUser($name: String!, $email: String!, $password: String!) {
-    createUser(name: $name, email: $email, password: $password) {
-      id
+const REGISTER = gql`
+  mutation Register($name: String!, $email: String!, $password: String!) {
+    register(name: $name, email: $email, password: $password) {
+      token
+      user {
+        id
+      }
     }
   }
 `;
 
-const validateEmail = (email) => {
-  const regex = /\S+@\S+\.\S+/;
-  return regex.test(email);
-};
-
 const Signup = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [validName, setValidName] = useState(true);
-  const [validEmail, setValidEmail] = useState(true);
-  const [validPassword, setValidPassword] = useState(true);
-  const [registered, setRegistered] = useState(false);
-  const { setLoggedIn } = useContext(UserContext);
-  const [createUser] = useMutation(CREATE_USER);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState({});
+  const { setLoggedIn, setRegister } = useContext(UserContext);
+  const [register, { loading }] = useMutation(REGISTER);
 
-  const handleName = (name) => {
-    !!name ? setValidName(true) : setValidName(false);
-    setName(name);
+  // What a mess
+  const validateForm = (err) => {
+    const formErrors = {};
+    if (err) {
+      const errorMessages = err.message.split(",");
+      const formattedErrors = errorMessages.map((error) => {
+        const x = error.replace("\n", "");
+        return x.replace("Validation error: ", "");
+      });
+
+      if (formattedErrors.includes("Please enter your name.")) {
+        formErrors.name = "Please enter your name.";
+      }
+      if (formattedErrors.includes("Please enter a valid email.")) {
+        formErrors.email = "Please enter a valid email.";
+      }
+      if (formattedErrors.includes("Email is already registered.")) {
+        formErrors.email = "Email is already registered.";
+      }
+      if (formattedErrors.includes("Please enter your password.")) {
+        formErrors.password = "Please enter your password.";
+      }
+      if (formattedErrors.includes("Please enter a valid email address.")) {
+        formErrors.email = "Please enter a valid email address.";
+      }
+
+      setErrors(formErrors);
+    }
   };
 
-  const handleEmail = (email) => {
-    validateEmail(email) ? setValidEmail(true) : setValidEmail(false);
-    setEmail(email);
-  };
-
-  const handlePassword = (password) => {
-    !!password ? setValidPassword(true) : setValidPassword(false);
-    setPassword(password);
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = () => {
-    createUser({
-      variables: { name: name, email: email, password: password },
+    register({
+      variables: {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      },
       onError: (err) => {
-        if (err.message.includes("name")) {
-          setValidName(false);
-        }
-        if (err.message.includes("email")) {
-          setValidEmail(false);
-        }
-        if (err.message.includes("password")) {
-          setValidPassword(false);
-        }
-        if (err.message === "Validation error") {
-          setRegistered(true);
-        }
+        validateForm(err);
       },
       onCompleted: () => {
         setLoggedIn(true);
@@ -66,50 +76,58 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col justify-center items-center bg-white w-96 rounded-lg p-8 drop-shadow-xl">
-      <p className="text-xl font-bold pb-8">Sign Up</p>
-      <p
-        className={`text-red-600 text-sm mb-4 ${
-          registered ? "block" : "hidden"
+      <p className="text-xl font-bold pb-2">Sign Up</p>
+      <ul
+        className={`text-red-600 text-sm mb-4 flex flex-col list-disc ${
+          errors ? "block" : "hidden"
         }`}
       >
-        Email is already registered. Please sign in.
-      </p>
+        {Object.entries(errors).map(([key, value]) => {
+          return <li key={key}>{value}</li>;
+        })}
+      </ul>
       <input
         className={`rounded-lg h-12 w-full p-4 border outline-none mb-4 ${
-          validName ? "border" : "border-red-600"
+          !errors.name ? "border" : "border-red-600"
         }`}
         placeholder="Name"
-        onChange={(e) => handleName(e.target.value)}
-        value={name}
+        onChange={(e) => handleChange(e)}
+        value={formData.name}
+        name="name"
         type="text"
       />
       <input
         className={`rounded-lg h-12 w-full p-4 border outline-none mb-4 ${
-          validEmail ? "border" : "border-red-600"
+          !errors.email ? "border" : "border-red-600"
         }`}
         placeholder="Email"
-        onChange={(e) => handleEmail(e.target.value)}
-        value={email}
+        onChange={(e) => handleChange(e)}
+        value={formData.email}
+        name="email"
         type="email"
       />
       <input
         className={`rounded-lg h-12 w-full p-4 border outline-none ${
-          validPassword ? "border" : "border-red-600"
+          !errors.password ? "border" : "border-red-600"
         }`}
         placeholder="Password"
-        onChange={(e) => handlePassword(e.target.value)}
-        value={password}
+        onChange={(e) => handleChange(e)}
+        value={formData.password}
         type="password"
+        name="password"
       />
       <button
         className="text-lg font-semibold bg-sky-500 active:bg-sky-300 text-white rounded-lg p-2 w-full h-12 mt-8 mb-6"
         onClick={() => handleSubmit()}
       >
-        Create Account
+        {loading ? `Loading...` : `Create Account`}
       </button>
       <p className="text-sm text-gray-500">
         Already have an account?{" "}
-        <button className="text-gray-700 font-semibold active:text-gray-400">
+        <button
+          className="text-gray-700 font-semibold active:text-gray-400"
+          onClick={() => setRegister(false)}
+        >
           Sign In
         </button>
       </p>

@@ -1,4 +1,6 @@
 const { DataSource } = require("apollo-datasource");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 class CharacterAPI extends DataSource {
   constructor({ store }) {
@@ -6,23 +8,35 @@ class CharacterAPI extends DataSource {
     this.store = store;
   }
 
-  async createUser(args) {
-    const response = await this.store.User.create({
+  async register(args) {
+    const user = await this.store.User.create({
       name: args.name,
       email: args.email,
       password: args.password,
     });
-    return response;
+
+    const token = jwt.sign({ id: user.id, email: user.email }, "test", {
+      expiresIn: "1y",
+    });
+
+    return { token, user };
   }
 
-  async info() {
-    const response = await this.store.Info.findAll();
-    return response[0];
-  }
-
-  async abilityScores() {
-    const response = await this.store.AbilityScores.findAll();
-    return response[0];
+  async login(args) {
+    const user = await this.store.User.findOne({
+      where: {
+        email: args.email,
+      },
+    });
+    const password_valid = await bcrypt.compare(args.password, user.password);
+    if (password_valid) {
+      const token = jwt.sign({ id: user.id, email: user.email }, "test", {
+        expiresIn: "1d",
+      });
+      return { token, user };
+    } else {
+      throw new Error("Incorrect email and/or password.");
+    }
   }
 }
 

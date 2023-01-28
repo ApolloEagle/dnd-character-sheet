@@ -2,12 +2,11 @@ const { gql } = require("apollo-server");
 
 const typeDefs = gql`
   type Query {
-    info: Info!
-    abilityScores: AbilityScores
+    _dummy: String
   }
-
   type Mutation {
-    createUser(name: String!, email: String!, password: String!): User!
+    register(name: String!, email: String!, password: String!): Auth!
+    login(email: String!, password: String!): Auth!
   }
 
   type User {
@@ -17,22 +16,9 @@ const typeDefs = gql`
     password: String!
   }
 
-  type Info {
-    name: String!
-    race: String!
-    class: String!
-    level: Int!
-    background: String!
-    speed: Int!
-  }
-
-  type AbilityScores {
-    strength: Int!
-    dexterity: Int!
-    constitution: Int!
-    intelligence: Int!
-    wisdom: Int!
-    charisma: Int!
+  type Auth {
+    token: String!
+    user: User!
   }
 `;
 
