@@ -1,12 +1,12 @@
 import React, { useState, createContext } from "react";
 import "./input.css";
-import { Signup, Signin } from "./components";
+import { Register, Login } from "./components";
 
 const UserContext = createContext(undefined);
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [register, setRegister] = useState(true);
+  const [register, setRegister] = useState(false);
   return (
     <UserContext.Provider value={{ loggedIn, setLoggedIn, setRegister }}>
       <div className="flex flex-col justify-center items-center h-screen w-screen bg-gray-100">
@@ -15,9 +15,9 @@ function App() {
             Create Character
           </button>
         ) : register ? (
-          <Signup />
+          <Register />
         ) : (
-          <Signin />
+          <Login />
         )}
       </div>
     </UserContext.Provider>

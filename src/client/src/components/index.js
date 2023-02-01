@@ -1,7 +1,7 @@
 import Info from "./info";
 import AbilityScores from "./ability-scores";
 import Speed from "./speed";
-import Signup from "./signup";
-import Signin from "./signin";
+import Register from "./register";
+import Login from "./login";
 
-export { Info, AbilityScores, Speed, Signup, Signin };
+export { Info, AbilityScores, Speed, Register, Login };

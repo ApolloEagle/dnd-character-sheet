@@ -28,14 +28,23 @@ class CharacterAPI extends DataSource {
         email: args.email,
       },
     });
-    const password_valid = await bcrypt.compare(args.password, user.password);
-    if (password_valid) {
-      const token = jwt.sign({ id: user.id, email: user.email }, "test", {
-        expiresIn: "1d",
-      });
-      return { token, user };
+
+    if (user) {
+      const password_valid = await bcrypt.compare(args.password, user.password);
+      if (password_valid) {
+        const token = jwt.sign({ id: user.id, email: user.email }, "test", {
+          expiresIn: "1d",
+        });
+        return { token, user };
+      } else {
+        throw new Error("Incorrect email and/or password.");
+      }
     } else {
-      throw new Error("Incorrect email and/or password.");
+      if (!args.email) {
+        throw new Error("Please enter a valid email.");
+      } else {
+        throw new Error("User is not registered.");
+      }
     }
   }
 }
