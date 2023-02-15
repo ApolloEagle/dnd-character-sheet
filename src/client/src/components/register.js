@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { UserContext } from "../app";
+import { UserContext } from "../App";
 import { useMutation, gql } from "@apollo/client";
 
 const REGISTER = gql`

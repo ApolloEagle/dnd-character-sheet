@@ -1,5 +1,6 @@
 {
-  "dependencies": {
-    "jsonwebtoken": "^9.0.0"
+  "scripts": {
+    "server": "cd src && cd server && npm i && npm run start",
+    "client": "cd src && cd client && npm i && npm run start"
   }
 }
