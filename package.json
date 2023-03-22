@@ -2,5 +2,8 @@
   "scripts": {
     "server": "cd src && cd server && npm i && npm run start",
     "client": "cd src && cd client && npm i && npm run start"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.13"
   }
 }

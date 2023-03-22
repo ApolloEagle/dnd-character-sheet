@@ -22,7 +22,9 @@ const Register = () => {
   });
   const [errors, setErrors] = useState({});
   const { setLoggedIn, setRegister } = useContext(UserContext);
-  const [register, { loading }] = useMutation(REGISTER);
+  const [register, { loading }] = useMutation(REGISTER, {
+    context: { endpoint: "local" },
+  });
   const navigate = useNavigate();
 
   // What a mess
@@ -69,6 +71,7 @@ const Register = () => {
       },
       onCompleted: () => {
         setLoggedIn(true);
+        navigate("/home");
       },
     });
   };

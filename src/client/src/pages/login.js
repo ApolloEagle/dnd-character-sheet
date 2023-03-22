@@ -21,7 +21,9 @@ const Login = () => {
   });
   const [errors, setErrors] = useState({});
   const { setLoggedIn, setRegister } = useContext(UserContext);
-  const [login, { loading }] = useMutation(LOGIN);
+  const [login, { loading }] = useMutation(LOGIN, {
+    context: { endpoint: "local" },
+  });
   const navigate = useNavigate();
 
   const validateForm = (err) => {
