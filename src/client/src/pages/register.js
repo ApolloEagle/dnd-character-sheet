@@ -60,7 +60,7 @@ const Register = () => {
       },
       onCompleted: () => {
         setLoggedIn(true);
-        navigate("/home");
+        navigate("/");
       },
     });
   };

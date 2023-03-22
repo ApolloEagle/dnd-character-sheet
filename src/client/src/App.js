@@ -10,7 +10,7 @@ function App() {
   const [, setRegister] = useState(false);
   return (
     <UserContext.Provider value={{ setLoggedIn, setRegister }}>
-      <div className="flex flex-col justify-center items-center h-screen w-screen bg-gray-100">
+      <div className="flex flex-col justify-center items-center h-screen w-screen bg-gray-100 bg-[url('/src/assets/hero.jpg')] bg-cover">
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Login />} />
