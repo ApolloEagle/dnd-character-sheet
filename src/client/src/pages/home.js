@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Dropdown } from "../components";
 import { RacesDocument } from "../graphql";
+import { UserContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const { login } = useContext(UserContext);
   const [create, setCreate] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!login) {
+      navigate("/");
+    }
+  }, [login, navigate]);
+
   return create ? (
     <Dropdown graphql={RacesDocument} />
   ) : (
