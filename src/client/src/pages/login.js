@@ -1,18 +1,8 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../App";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-
-const LOGIN = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      token
-      user {
-        id
-      }
-    }
-  }
-`;
+import { LoginDocument } from "../graphql";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -21,7 +11,7 @@ const Login = () => {
   });
   const [errors, setErrors] = useState({});
   const { setLoggedIn, setRegister } = useContext(UserContext);
-  const [login, { loading }] = useMutation(LOGIN, {
+  const [login, { loading }] = useMutation(LoginDocument, {
     context: { endpoint: "local" },
   });
   const navigate = useNavigate();

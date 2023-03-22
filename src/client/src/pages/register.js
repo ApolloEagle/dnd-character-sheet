@@ -1,18 +1,8 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../App";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
-
-const REGISTER = gql`
-  mutation Register($name: String!, $email: String!, $password: String!) {
-    register(name: $name, email: $email, password: $password) {
-      token
-      user {
-        id
-      }
-    }
-  }
-`;
+import { RegisterDocument } from "../graphql";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -22,12 +12,11 @@ const Register = () => {
   });
   const [errors, setErrors] = useState({});
   const { setLoggedIn, setRegister } = useContext(UserContext);
-  const [register, { loading }] = useMutation(REGISTER, {
+  const [register, { loading }] = useMutation(RegisterDocument, {
     context: { endpoint: "local" },
   });
   const navigate = useNavigate();
 
-  // What a mess
   const validateForm = (err) => {
     const formErrors = {};
     if (err) {
