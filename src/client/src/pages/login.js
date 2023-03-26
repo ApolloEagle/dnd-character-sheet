@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../App";
 import { useMutation } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
@@ -10,11 +10,18 @@ const Login = () => {
     password: "",
   });
   const [errors, setErrors] = useState({});
-  const { setLoggedIn, setRegister } = useContext(UserContext);
+  const { setLoggedIn, setRegister, setAuthenticated, isAuthenticated } =
+    useContext(UserContext);
   const [login, { loading }] = useMutation(LoginDocument, {
     context: { endpoint: "local" },
   });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/home");
+    }
+  }, [navigate, isAuthenticated]);
 
   const validateForm = (err) => {
     const formErrors = {};
@@ -55,9 +62,13 @@ const Login = () => {
       onError: (err) => {
         validateForm(err);
       },
-      onCompleted: () => {
-        setLoggedIn(true);
-        navigate("/home");
+      onCompleted: ({ login }) => {
+        if (login.token) {
+          setAuthenticated(true);
+          setLoggedIn(true);
+          navigate("/home");
+          sessionStorage.setItem("user", "test");
+        }
       },
     });
   };

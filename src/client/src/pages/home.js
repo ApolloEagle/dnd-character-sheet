@@ -5,15 +5,15 @@ import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const { login } = useContext(UserContext);
+  const { isAuthenticated } = useContext(UserContext);
   const [create, setCreate] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!login) {
+    if (!isAuthenticated) {
       navigate("/");
     }
-  }, [login, navigate]);
+  }, [isAuthenticated, navigate]);
 
   return create ? (
     <Dropdown graphql={RacesDocument} />

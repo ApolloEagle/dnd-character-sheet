@@ -14,7 +14,7 @@ const local = new HttpLink({
 });
 
 const dnd5e = new HttpLink({
-  uri: "https://www.dnd5eapi.co/graphql",
+  uri: "https://us-west-2.aws.realm.mongodb.com/api/client/v2.0/app/data-xgxjk/graphql",
 });
 
 const client = new ApolloClient({
